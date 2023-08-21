@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Typography, List, ListItem, Checkbox, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
@@ -25,13 +25,15 @@ const DepartmentComponent = () => {
   const [expanded, setExpanded] = useState('');
   const [selectedItems, setSelectedItems] = useState(new Set());
 
-  const handleExpand = (departmentId) => {
+  const handleExpand = (departmentId: any) => {
     setExpanded(expanded === departmentId ? '' : departmentId);
   };
 
-  const updateSelectedItems = (departmentId, subDepartmentIndex, shouldCheck) => {
+  const updateSelectedItems = (departmentId: any, subDepartmentIndex: number, shouldCheck: boolean) => {
     const department = departmentData.find((dept) => dept.department === departmentId);
-    const subDepartment = department.subDepartments[subDepartmentIndex];
+    let subDepartment;
+    if (department)
+      subDepartment = department.subDepartments[subDepartmentIndex];
     const itemKey = `${departmentId}_${subDepartment}`;
 
     const newSelectedItems = new Set(selectedItems);
@@ -45,21 +47,23 @@ const DepartmentComponent = () => {
     setSelectedItems(newSelectedItems);
   };
 
-  const handleSelectDepartment = (departmentId, shouldCheck) => {
+  const handleSelectDepartment = (departmentId: any, shouldCheck: boolean) => {
     const department = departmentData.find((dept) => dept.department === departmentId);
-  
+
     if (shouldCheck) {
-      department.subDepartments.forEach((subDepartment) => {
-        const subItemKey = `${departmentId}_${subDepartment}`;
-        setSelectedItems(selectedItems.add(subItemKey));
-      });
+      if (department)
+        department.subDepartments.forEach((subDepartment) => {
+          const subItemKey = `${departmentId}_${subDepartment}`;
+          setSelectedItems(selectedItems.add(subItemKey));
+        });
     } else {
-      department.subDepartments.forEach((subDepartment) => {
-        const subItemKey = `${departmentId}_${subDepartment}`;
-        selectedItems.delete(subItemKey);
-      });
+      if (department)
+        department.subDepartments.forEach((subDepartment) => {
+          const subItemKey = `${departmentId}_${subDepartment}`;
+          selectedItems.delete(subItemKey);
+        });
     }
-  
+
     // Update department checkbox
     const departmentItemKey = `${departmentId}_department`;
     setSelectedItems((prevSelectedItems) =>
@@ -68,13 +72,13 @@ const DepartmentComponent = () => {
         : new Set([...prevSelectedItems].filter(item => item !== departmentItemKey))
     );
   };
-  
+
 
   return (
     <div style={{ width: '80%', marginInline: 'auto', marginBlock: '50px' }}>
       {departmentData.map((department, departmentIndex) => (
         <div key={departmentIndex}>
-          <div style={{ display: 'flex', alignItems: 'center', cursor:'pointer' }}>
+          <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
             <Checkbox
               checked={department.subDepartments.every(subDept => selectedItems.has(`${department.department}_${subDept}`))}
               onChange={(e) => handleSelectDepartment(department.department, e.target.checked)}
@@ -88,7 +92,7 @@ const DepartmentComponent = () => {
             />
           </div>
           <Accordion expanded={expanded === department.department} >
-            <AccordionSummary expandIcon style={{display:'none'}}/>
+            <AccordionSummary expandIcon style={{ display: 'none' }} />
             <AccordionDetails >
               <List>
                 {department.subDepartments.map((subDepartment, subDepartmentIndex) => (

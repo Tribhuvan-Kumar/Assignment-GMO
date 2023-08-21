@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import UserForm from './components/UserForm';
 import SecondPageComponent from './components/SecondPageComponent1';
@@ -10,7 +10,7 @@ import './styles/App.css';
 const App = () => {
   const [user, setUser] = useState(localStorage.getItem("User"));
 
-  const handleSaveUser = (userData) => {
+  const handleSaveUser = (userData:any) => {
     setUser(userData);
     localStorage.setItem("User",userData);
   };

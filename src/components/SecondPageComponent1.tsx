@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
 import BusinessServicesList from './DepartmentComponent';
@@ -34,7 +34,14 @@ const SecondPageComponent1 = () => {
       <Nav/>
       <div className="gridContainer" >
         <Box sx={{ height: 400, width: '80%', margin: "auto", marginTop: "5px" }}>
-          {posts.length != 0 ? <DataGrid rows={posts} columns={columns} pageSize={5}
+          {posts.length != 0 ? <DataGrid rows={posts} columns={columns} 
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 5,
+                },
+              },
+            }}
             checkboxSelection
             disableRowSelectionOnClick
           /> : <h3>Loading...</h3>}
